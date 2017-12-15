@@ -1,0 +1,24 @@
+# Node generated files
+
+node_modules/
+npm-debug.log
+
+# Elm generated files
+
+elm-stuff/
+repl-temp-*
+
+# Purescript generated files
+
+/bower_components/
+/node_modules/
+/.pulp-cache/
+**/output/
+/generated-docs/
+/.psc*
+/.purs*
+/.psa*
+
+# Build & Packaging generated files
+dist/
+packaged/

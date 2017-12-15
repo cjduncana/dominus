@@ -1,0 +1,14 @@
+{
+  "name": "dominus",
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "purescript-prelude": "^3.1.0",
+    "purescript-eff": "^3.1.0"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^3.0.0"
+  }
+}
