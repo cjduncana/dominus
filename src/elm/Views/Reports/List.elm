@@ -39,7 +39,7 @@ addNewReport =
 
 reportsView : Maybe Date -> Reports -> List (Element Styles variation msg)
 reportsView today =
-    indexedMapSelected (reportView today)
+    NonEmptyArray.indexedMapSelected (reportView today)
         >> NonEmptyArray.toList
 
 
@@ -122,15 +122,6 @@ reportListItemAttrs =
     , Attrs.paddingBottom 13
     , Attrs.width Attrs.fill
     ]
-
-
-indexedMapSelected : (Bool -> Int -> a -> b) -> NonEmptyArray a -> NonEmptyArray b
-indexedMapSelected function array =
-    let
-        innerFn index =
-            function (index == NonEmptyArray.selectedIndex array) index
-    in
-    NonEmptyArray.indexedMap innerFn array
 
 
 ternary : Bool -> a -> a -> a
