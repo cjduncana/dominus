@@ -1,4 +1,4 @@
-module Fonts exposing (domine, roboto)
+module Views.Fonts exposing (domine, roboto)
 
 import Style exposing (Font)
 import Style.Font

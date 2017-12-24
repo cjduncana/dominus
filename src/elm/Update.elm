@@ -1,8 +1,10 @@
 module Update exposing (update)
 
-import Model exposing (Model)
+import Model exposing (Model, Msg)
 
 
-update : msg -> Model -> ( Model, Cmd msg )
-update _ model =
-    ( model, Cmd.none )
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        Model.DateReceived date ->
+            ( { model | today = Just date }, Cmd.none )

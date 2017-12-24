@@ -2,8 +2,8 @@ module Views.Header exposing (header)
 
 import Element exposing (Element)
 import Element.Attributes as Attrs
-import Styles exposing (Styles)
-import Vectors
+import Views.Styles as Styles exposing (Styles)
+import Views.Vectors as Vectors
 
 
 header : Element Styles variation msg
@@ -22,11 +22,13 @@ header =
 
 accentBox : Element Styles variation msg
 accentBox =
-    Element.html Vectors.accentBox
-        |> Element.el Styles.NoStyle
-            [ Attrs.center
-            , Attrs.alignBottom
-            ]
+    Element.el Styles.AccentBox
+        [ Attrs.center
+        , Attrs.alignBottom
+        , Attrs.height <| Attrs.px 5
+        , Attrs.width <| Attrs.px 67
+        ]
+        Element.empty
 
 
 systemControls : Element Styles variation msg
@@ -45,7 +47,7 @@ systemControls =
 closeButton : Element Styles variation msg
 closeButton =
     Element.html Vectors.close
-        |> Element.el Styles.NoStyle
+        |> Element.el Styles.NoLineHeight
             [ Attrs.center
             , Attrs.verticalCenter
             ]
@@ -54,7 +56,7 @@ closeButton =
 minimizeButton : Element Styles variation msg
 minimizeButton =
     Element.html Vectors.minimize
-        |> Element.el Styles.NoStyle
+        |> Element.el Styles.NoLineHeight
             [ Attrs.center
             , Attrs.verticalCenter
             ]

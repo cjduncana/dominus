@@ -1,15 +1,16 @@
 module Main exposing (main)
 
 import Html
-import Model exposing (Model)
+import Json.Decode exposing (Value)
+import Model exposing (Model, Msg)
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 import View exposing (view)
 
 
-main : Program Never Model msg
+main : Program Value Model Msg
 main =
-    Html.program
+    Html.programWithFlags
         { init = Model.init
         , update = update
         , subscriptions = subscriptions
