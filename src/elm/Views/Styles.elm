@@ -30,6 +30,11 @@ import Views.Colors as Colors
 import Views.Fonts as Fonts
 
 
+type FontStack
+    = SansSerif
+    | Serif
+
+
 type Styles
     = NoStyle
     | NoLineHeight
@@ -120,7 +125,7 @@ styleSheet =
             , Style.Color.text Colors.accent
             , Style.Font.letterSpacing 0.4
             , Style.Font.size 14
-            , Style.Font.typeface [ Fonts.roboto, Style.Font.sansSerif ]
+            , fontStack SansSerif
             , Style.Font.weight 700
             ]
         , Style.style TableHeader
@@ -136,6 +141,16 @@ styleSheet =
         ]
 
 
+fontStack : FontStack -> Property class variation
+fontStack stack =
+    case stack of
+        SansSerif ->
+            Style.Font.typeface [ Fonts.roboto, Style.Font.sansSerif ]
+
+        Serif ->
+            Style.Font.typeface [ Fonts.domine, Style.Font.serif ]
+
+
 lightBorder : List (Property class variation)
 lightBorder =
     [ Style.Border.all 1
@@ -146,13 +161,9 @@ lightBorder =
 
 textProps : List (Property class variation)
 textProps =
-    [ Style.Color.text Colors.mainText
-    , Style.Font.typeface [ Fonts.roboto, Style.Font.sansSerif ]
-    ]
+    [ Style.Color.text Colors.mainText, fontStack SansSerif ]
 
 
 titleProps : List (Property class variation)
 titleProps =
-    [ Style.Color.text Colors.mainText
-    , Style.Font.typeface [ Fonts.domine, Style.Font.serif ]
-    ]
+    [ Style.Color.text Colors.mainText, fontStack Serif ]
