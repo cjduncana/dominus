@@ -1,6 +1,15 @@
-module Utils.Date exposing (dateToString, monthToString)
+module Utils.Date exposing (dateToAbbrString, dateToString, monthToString)
 
 import Date exposing (Date, Month)
+
+
+dateToAbbrString : Date -> String
+dateToAbbrString date =
+    (toString <| Date.month date)
+        ++ ". "
+        ++ (toString <| Date.day date)
+        ++ ", "
+        ++ (toString <| Date.year date)
 
 
 dateToString : Date -> String

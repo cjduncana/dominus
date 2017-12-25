@@ -1,4 +1,4 @@
-module Model exposing (Model, Msg(DateReceived), init)
+module Model exposing (Model, Msg(DateReceived, NoOp), init)
 
 import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder, Value)
@@ -37,6 +37,7 @@ initCmd model =
 
 type Msg
     = DateReceived Date
+    | NoOp
 
 
 reportsDecoder : Decoder Reports

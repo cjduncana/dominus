@@ -8,3 +8,6 @@ update msg model =
     case msg of
         Model.DateReceived date ->
             ( { model | today = Just date }, Cmd.none )
+
+        Model.NoOp ->
+            ( model, Cmd.none )

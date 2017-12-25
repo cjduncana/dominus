@@ -1,6 +1,6 @@
 module Views.Reports.List exposing (reportsList)
 
-import Array.NonEmpty as NonEmptyArray exposing (NonEmptyArray)
+import Array.NonEmpty as NonEmptyArray
 import Date exposing (Date)
 import Element exposing (Attribute, Element)
 import Element.Attributes as Attrs
@@ -58,7 +58,7 @@ selectedReport : Int -> Maybe Date -> Report -> Element Styles variation msg
 selectedReport _ =
     Models.Report.mapReport
         (\isCompleted maybeDate ->
-            Element.column Styles.ReportListItem
+            Element.column Styles.Card
                 reportListItemAttrs
                 [ Element.row Styles.NoStyle
                     [ Attrs.spread ]
@@ -92,7 +92,7 @@ otherReport : Int -> Maybe Date -> Report -> Element Styles variation msg
 otherReport _ =
     Models.Report.mapReport
         (\_ maybeDate ->
-            Element.row Styles.ReportListItem
+            Element.row Styles.Card
                 (Attrs.spread :: reportListItemAttrs)
                 [ Element.whenJust maybeDate dateView
                 , Element.html Vectors.deleteButton

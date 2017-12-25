@@ -4,14 +4,20 @@ module Views.Styles
             ( AccentBox
             , AddReport
             , Body
+            , CancelButton
+            , Card
             , DigitDate
             , Header
             , Month
             , NoLineHeight
             , NoStyle
-            , ReportListItem
+            , ReportDate
+            , ReportInput
+            , ReportInputWrapper
             , ReportListItemComplete
             , ReportListItemEdit
+            , SaveButton
+            , TableHeader
             )
         , styleSheet
         )
@@ -30,12 +36,18 @@ type Styles
     | AccentBox
     | AddReport
     | Body
+    | CancelButton
+    | Card
     | DigitDate
     | Header
     | Month
-    | ReportListItem
+    | ReportDate
+    | ReportInput
+    | ReportInputWrapper
     | ReportListItemComplete
     | ReportListItemEdit
+    | SaveButton
+    | TableHeader
 
 
 styleSheet : StyleSheet Styles variation
@@ -54,6 +66,19 @@ styleSheet =
                 :: textProps
             )
         , Style.style Body [ Style.Color.background Colors.background ]
+        , Style.style CancelButton
+            (Style.Border.all 2
+                :: Style.Border.solid
+                :: Style.Color.border Colors.mainText
+                :: Style.Font.letterSpacing 0.4
+                :: Style.Font.size 14
+                :: Style.Font.weight 700
+                :: textProps
+            )
+        , Style.style Card
+            (Style.Color.background Colors.cardBackground
+                :: lightBorder
+            )
         , Style.style DigitDate
             (Style.Font.letterSpacing 0.5
                 :: Style.Font.size 16
@@ -70,11 +95,17 @@ styleSheet =
                 :: textProps
             )
         , Style.style Month (Style.Font.size 30 :: titleProps)
-        , Style.style ReportListItem
-            [ Style.Border.all 1
+        , Style.style ReportDate (Style.Font.size 40 :: titleProps)
+        , Style.style ReportInput
+            (Style.Font.letterSpacing 0.4
+                :: Style.Font.size 12
+                :: textProps
+                ++ lightBorder
+            )
+        , Style.style ReportInputWrapper
+            [ Style.Border.top 1
             , Style.Border.solid
-            , Style.Color.background Colors.cardBackground
-            , Style.Color.border Colors.lightBorder
+            , Style.Color.border Colors.system
             ]
         , Style.style ReportListItemComplete
             (Style.Font.size 16
@@ -82,7 +113,35 @@ styleSheet =
                 :: textProps
             )
         , Style.style ReportListItemEdit (Style.Font.size 16 :: textProps)
+        , Style.style SaveButton
+            [ Style.Border.all 2
+            , Style.Border.solid
+            , Style.Color.border Colors.accent
+            , Style.Color.text Colors.accent
+            , Style.Font.letterSpacing 0.4
+            , Style.Font.size 14
+            , Style.Font.typeface [ Fonts.roboto, Style.Font.sansSerif ]
+            , Style.Font.weight 700
+            ]
+        , Style.style TableHeader
+            (Style.Border.bottom 1
+                :: Style.Border.solid
+                :: Style.Color.border Colors.system
+                :: Style.Font.center
+                :: Style.Font.letterSpacing 0.4
+                :: Style.Font.size 14
+                :: Style.Font.weight 700
+                :: textProps
+            )
         ]
+
+
+lightBorder : List (Property class variation)
+lightBorder =
+    [ Style.Border.all 1
+    , Style.Border.solid
+    , Style.Color.border Colors.lightBorder
+    ]
 
 
 textProps : List (Property class variation)
