@@ -9,7 +9,6 @@ module Views.Styles
             , DigitDate
             , Header
             , Month
-            , NoLineHeight
             , NoStyle
             , ReportDate
             , ReportInput
@@ -17,6 +16,7 @@ module Views.Styles
             , ReportListItemComplete
             , ReportListItemEdit
             , SaveButton
+            , SystemButton
             , TableHeader
             )
         , styleSheet
@@ -37,7 +37,6 @@ type FontStack
 
 type Styles
     = NoStyle
-    | NoLineHeight
     | AccentBox
     | AddReport
     | Body
@@ -52,6 +51,7 @@ type Styles
     | ReportListItemComplete
     | ReportListItemEdit
     | SaveButton
+    | SystemButton
     | TableHeader
 
 
@@ -59,7 +59,6 @@ styleSheet : StyleSheet Styles variation
 styleSheet =
     Style.styleSheet
         [ Style.style NoStyle []
-        , Style.style NoLineHeight [ Style.Font.lineHeight 0 ]
         , Style.style AccentBox [ Style.Color.background Colors.accent ]
         , Style.style AddReport
             (Style.Border.all 1
@@ -127,6 +126,10 @@ styleSheet =
             , Style.Font.size 14
             , fontStack SansSerif
             , Style.Font.weight 700
+            ]
+        , Style.style SystemButton
+            [ Style.cursor "pointer"
+            , Style.Font.lineHeight 0
             ]
         , Style.style TableHeader
             (Style.Border.bottom 1

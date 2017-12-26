@@ -15,6 +15,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   watch: true,
+  target: 'electron',
   devtool: prod && 'source-map' || 'inline-source-map',
   module: {
     loaders: [{

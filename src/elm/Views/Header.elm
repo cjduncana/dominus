@@ -2,11 +2,13 @@ module Views.Header exposing (header)
 
 import Element exposing (Element)
 import Element.Attributes as Attrs
+import Element.Events as Events
+import Model exposing (Msg)
 import Views.Styles as Styles exposing (Styles)
 import Views.Vectors as Vectors
 
 
-header : Element Styles variation msg
+header : Element Styles variation Msg
 header =
     Element.text "Dominus"
         |> Element.el Styles.NoStyle
@@ -31,7 +33,7 @@ accentBox =
         Element.empty
 
 
-systemControls : Element Styles variation msg
+systemControls : Element Styles variation Msg
 systemControls =
     Element.row Styles.NoStyle
         [ Attrs.padding 12.5
@@ -44,19 +46,21 @@ systemControls =
             ]
 
 
-closeButton : Element Styles variation msg
+closeButton : Element Styles variation Msg
 closeButton =
     Element.html Vectors.close
-        |> Element.el Styles.NoLineHeight
+        |> Element.el Styles.SystemButton
             [ Attrs.center
             , Attrs.verticalCenter
+            , Events.onClick Model.closeWindow
             ]
 
 
-minimizeButton : Element Styles variation msg
+minimizeButton : Element Styles variation Msg
 minimizeButton =
     Element.html Vectors.minimize
-        |> Element.el Styles.NoLineHeight
+        |> Element.el Styles.SystemButton
             [ Attrs.center
             , Attrs.verticalCenter
+            , Events.onClick Model.minimizeWindow
             ]

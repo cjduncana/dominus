@@ -62,7 +62,6 @@
         "no-sparse-arrays": 2,
         "no-ex-assign": 2,
         "no-var": 2,
-        "prefer-arrow-callback": 2,
         "prefer-const": 2,
         "space-before-function-paren": [2, "never"],
         "no-const-assign": 2

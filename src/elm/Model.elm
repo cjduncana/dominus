@@ -1,9 +1,17 @@
-module Model exposing (Model, Msg(DateReceived, NoOp), init)
+module Model
+    exposing
+        ( Model
+        , Msg(DateReceived, NoOp, PortMsg)
+        , closeWindow
+        , init
+        , minimizeWindow
+        )
 
 import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Decode.Extra as Decode
 import Models.Report exposing (Reports)
+import Ports
 import Task
 
 
@@ -37,7 +45,18 @@ initCmd model =
 
 type Msg
     = DateReceived Date
+    | PortMsg Ports.Msg
     | NoOp
+
+
+closeWindow : Msg
+closeWindow =
+    PortMsg Ports.CloseWindow
+
+
+minimizeWindow : Msg
+minimizeWindow =
+    PortMsg Ports.MinimizeWindow
 
 
 reportsDecoder : Decoder Reports

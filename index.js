@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -15,6 +15,18 @@ webpack(config).watch({}, () => {
     mainWindow.reload();
   };
 });
+
+function closeWindow() {
+  if (mainWindow) {
+    mainWindow.close();
+  };
+}
+
+function minimizeWindow() {
+  if (mainWindow) {
+    mainWindow.minimize();
+  };
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -37,6 +49,21 @@ function createWindow() {
     mainWindow = null;
   });
 }
+
+const CloseWindow = 'CloseWindow';
+const MinimizeWindow = 'MinimizeWindow';
+
+ipcMain.on('system-action', (event, action) => {
+  switch (action) {
+    case CloseWindow:
+      closeWindow();
+      break;
+
+    case MinimizeWindow:
+      minimizeWindow();
+      break;
+  }
+})
 
 /* Mac Specific things */
 

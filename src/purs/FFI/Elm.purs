@@ -1,13 +1,13 @@
-module FFI.Elm (startElm) where
+module FFI.Elm (start) where
 
 import Control.Monad.Eff (Eff)
 import Data.Argonaut.Core (Json)
 import Data.Argonaut.Encode (encodeJson)
-import Prelude (Unit, (>>>))
-import Types (Flags)
+import Prelude ((>>>))
+import Types (App, Flags)
 
-foreign import startElmImpl :: forall eff. Json -> Eff eff Unit
+foreign import _startElmImpl :: forall eff. Json -> Eff eff App
 
-startElm :: forall eff. Flags -> Eff eff Unit
-startElm =
-  encodeJson >>> startElmImpl
+start :: forall eff. Flags -> Eff eff App
+start =
+  encodeJson >>> _startElmImpl
