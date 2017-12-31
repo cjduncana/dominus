@@ -16,19 +16,24 @@ import FFI.Sql (SQLJS)
 import Node.Buffer (BUFFER)
 import Node.FS (FS)
 import Node.FS.Aff as FS
-import Prelude (Unit, bind, not, pure, unit)
-import Types (flags, reports)
+import Prelude (Unit, bind, not, pure, unit, (#), (>>=))
+import Reports as Reports
+import Types (Report, flags)
+
 
 main :: forall eff. Eff (buffer :: BUFFER, console :: CONSOLE, fs :: FS, now :: NOW, sql :: SQLJS | eff) Unit
 main =
-  Aff.runAff_ (Either.either Console.errorShow (\_ -> appInit)) dbInit
+  dbInit
+    >>= (\_ -> Reports.list)
+    # Aff.runAff_ (Either.either Console.errorShow appInit)
 
-appInit :: forall eff. Eff (now :: NOW | eff) Unit
-appInit = do
+
+appInit :: forall eff. Array Report -> Eff (now :: NOW | eff) Unit
+appInit reports = do
   now <- Now.now
-  -- TODO: Get records from database
   app <- Elm.start (flags reports now)
   Ports.start app
+
 
 dbInit :: forall eff. Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
 dbInit = do

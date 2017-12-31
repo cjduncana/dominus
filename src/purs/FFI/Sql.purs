@@ -1,9 +1,11 @@
-module FFI.Sql (Database, QueryResult, SQLEff, SQLJS, close, create, exec, export, open) where
+module FFI.Sql (Database, QueryResult, SQLEff, SQLJS, close, create, exec, export, getFirstResult, open) where
 
 import Control.Monad.Eff (Eff, kind Effect)
+import Data.Array as Array
 import Data.Foreign (Foreign)
+import Data.Maybe as Maybe
 import Node.Buffer (Buffer, Octet)
-import Prelude (Unit)
+import Prelude (Unit, (>>>))
 
 foreign import data SQLJS :: Effect
 
@@ -13,6 +15,16 @@ type QueryResult =
     { columns :: Array String
     , values :: Array (Array Foreign)
     }
+
+emptyResult :: QueryResult
+emptyResult =
+    { columns: []
+    , values: []
+    }
+
+getFirstResult :: Array QueryResult -> QueryResult
+getFirstResult =
+  Array.head >>> Maybe.fromMaybe emptyResult
 
 type SQLEff eff a = Eff (sql :: SQLJS | eff) a
 
