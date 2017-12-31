@@ -1,6 +1,7 @@
 'use strict';
 
 const combineLoaders = require('webpack-combine-loaders');
+const copyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -42,6 +43,7 @@ module.exports = {
     }]
   },
   plugins: [
+    new copyWebpackPlugin(['./src/static/']),
     new HtmlWebpackPlugin({
       title: 'Dominus',
       hash: true,

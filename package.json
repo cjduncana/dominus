@@ -24,8 +24,12 @@
     "url": "https://github.com/cjduncana/dominus/issues"
   },
   "homepage": "https://github.com/cjduncana/dominus#readme",
-  "devDependencies": {
+  "dependencies": {
     "electron": "^1.7.9",
+    "sql.js": "^0.4.0"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.3.1",
     "electron-packager": "^10.1.0",
     "elm-hot-loader": "^0.5.4",
     "elm-webpack-loader": "^4.4.0",
