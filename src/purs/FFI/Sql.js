@@ -28,6 +28,6 @@ exports.export = function(db) {
 
 exports.open = function(buffer) {
   return function() {
-    new SQL.Database(buffer);
+    return new SQL.Database(buffer);
   };
 };
