@@ -1,6 +1,5 @@
 module Reports (list) where
 
-import Config as Config
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff as Aff
 import Control.Monad.Except as Except
@@ -10,6 +9,7 @@ import Data.Foreign as Foreign
 import Data.Functor as Functor
 import Data.Traversable as Traversable
 import Database as Database
+import FFI.Config as Config
 import FFI.Sql (QueryResult, SQLJS)
 import FFI.Sql as Sql
 import Node.Buffer (BUFFER)

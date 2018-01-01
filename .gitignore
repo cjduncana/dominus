@@ -22,3 +22,4 @@ repl-temp-*
 # Build & Packaging generated files
 dist/
 packaged/
+static/dominus.db

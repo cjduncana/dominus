@@ -8,7 +8,7 @@ import FFI.Electron as Electron
 import Prelude (Unit, ($), (>>>))
 import Types (App)
 
-foreign import _startPorts :: forall eff a. (Json -> Eff eff Unit) -> App -> Eff eff Unit
+foreign import _startPorts :: forall eff. (Json -> Eff eff Unit) -> App -> Eff eff Unit
 
 start :: forall eff. App -> Eff eff Unit
 start =

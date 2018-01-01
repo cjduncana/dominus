@@ -1,20 +1,12 @@
 'use strict';
 
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
-const webpack = require('webpack');
 
-const config = require('./webpack.config');
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 let mainWindow;
 
 app.on('ready', createWindow);
-
-webpack(config).watch({}, () => {
-  if (mainWindow) {
-    mainWindow.reload();
-  };
-});
 
 function closeWindow() {
   if (mainWindow) {
@@ -36,18 +28,26 @@ function createWindow() {
     show: false
   });
 
-  mainWindow.loadURL(path.join('file://', __dirname, 'dist', 'index.html'));
+  const url = isDevelopment
+    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    : `file://${__dirname}/index.html`;
+
+  mainWindow.loadURL(url);
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
 
   // open dev tools by default so we can see any console errors
-  mainWindow.webContents.openDevTools();
+  if (isDevelopment) {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  return mainWindow;
 }
 
 const CloseWindow = 'CloseWindow';
@@ -63,7 +63,7 @@ ipcMain.on('system-action', (event, action) => {
       minimizeWindow();
       break;
   }
-})
+});
 
 /* Mac Specific things */
 

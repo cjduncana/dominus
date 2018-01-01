@@ -1,6 +1,5 @@
 module Main (main) where
 
-import Config as Config
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff as Aff
 import Control.Monad.Eff (Eff)
@@ -10,6 +9,7 @@ import Control.Monad.Eff.Now (NOW)
 import Control.Monad.Eff.Now as Now
 import Data.Either as Either
 import Database as Database
+import FFI.Config as Config
 import FFI.Elm as Elm
 import FFI.Ports as Ports
 import FFI.Sql (SQLJS)
