@@ -4,7 +4,11 @@
   "description": "Keep an inventory",
   "main": "index.js",
   "scripts": {
-    "install:all": "npm install && bower install && elm package install --yes",
+    "precompile": "npm run install:all",
+    "compile": "electron-webpack",
+    "predist": "npm run compile",
+    "dist": "electron-builder",
+    "install:all": "yarn install --ignore-engines && bower install && elm package install --yes",
     "start": "electron-webpack dev"
   },
   "repository": {
@@ -31,15 +35,20 @@
     }
   },
   "dependencies": {
-    "electron": "^1.7.9",
+    "source-map-support": "^0.5.0",
     "sql.js": "^0.4.0"
   },
   "devDependencies": {
+    "electron": "^1.7.9",
+    "electron-builder": "^19.50.0",
     "electron-webpack": "^1.11.0",
     "elm-hot-loader": "^0.5.4",
     "elm-webpack-loader": "^4.4.0",
     "purs-loader": "^3.1.2",
     "webpack": "^3.10.0",
     "webpack-combine-loaders": "^2.0.3"
+  },
+  "resolutions": {
+    "webpack-sources": "1.0.1"
   }
 }

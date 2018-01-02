@@ -19,6 +19,10 @@ repl-temp-*
 /.purs*
 /.psa*
 
+# Yarn Generated Files
+
+yarn-error.log
+
 # Build & Packaging generated files
 dist/
 packaged/
