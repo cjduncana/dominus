@@ -4,7 +4,6 @@ import Date exposing (Date)
 import Element exposing (Element, OnGrid)
 import Element.Attributes as Attrs
 import Element.Input as Input
-import Html
 import Model exposing (Msg(NoOp))
 import Utils.Date as Date
 import Views.Styles as Styles exposing (Styles)
@@ -95,10 +94,9 @@ tableHeaders =
 
 tableHeader : String -> Element Styles variation msg
 tableHeader =
-    Html.text
+    Element.text
         >> List.singleton
-        >> Html.span []
-        >> Element.html
+        >> Element.paragraph Styles.NoStyle []
         >> Element.el Styles.NoStyle [ Attrs.alignLeft, Attrs.alignBottom ]
         >> Element.el Styles.TableHeader [ Attrs.paddingBottom 8 ]
 
