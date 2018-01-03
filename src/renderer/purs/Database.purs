@@ -1,22 +1,22 @@
-module Database (create, empty, execute) where
+module Database (create, execute) where
 
 import Control.Monad.Aff (Aff)
 import Control.Monad.Eff.Class (liftEff)
-import FFI.Sql (Database, QueryResult, SQLJS)
+import Data.Foldable as Foldable
+import FFI.Sql (Database, QueryResult, SQLJS, SQLEff)
 import FFI.Sql as Sql
+import Migrations as Migrations
 import Node.Buffer (BUFFER)
 import Node.Buffer as Buffer
-import Node.Encoding (Encoding(..))
 import Node.FS (FS)
 import Node.FS.Aff as FS
 import Node.Path (FilePath)
-import Prelude (Unit, bind, discard, pure, void, ($))
+import Prelude (Unit, bind, discard, pure, ($))
 
 
-applySchema :: forall eff. FilePath -> Database -> Aff (fs :: FS, sql :: SQLJS | eff) Unit
-applySchema schemaFilePath database = void do
-  schema <- FS.readTextFile UTF8 schemaFilePath
-  liftEff $ Sql.exec database schema
+applyMigrations :: forall eff. Database -> SQLEff eff Unit
+applyMigrations database =
+  Foldable.traverse_ (Sql.exec database) Migrations.sql
 
 
 close :: forall eff. Database -> FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
@@ -27,16 +27,10 @@ close database databaseFilePath = do
   liftEff $ Sql.close database
 
 
-create :: forall eff. FilePath -> FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
-create databaseFilePath schemaFilePath = do
+create :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
+create databaseFilePath = do
   database <- liftEff $ Sql.create
-  applySchema schemaFilePath database
-  close database databaseFilePath
-
-
-empty :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
-empty databaseFilePath = do
-  database <- liftEff $ Sql.create
+  liftEff $ applyMigrations database
   close database databaseFilePath
 
 

@@ -16,7 +16,7 @@ import FFI.Sql (SQLJS)
 import Node.Buffer (BUFFER)
 import Node.FS (FS)
 import Node.FS.Aff as FS
-import Prelude (Unit, bind, not, pure, unit, (#), (>>=))
+import Prelude (Unit, bind, pure, unit, (#), (>>=))
 import Reports as Reports
 import Types (Report, flags)
 
@@ -38,9 +38,4 @@ appInit reports = do
 dbInit :: forall eff. Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
 dbInit = do
   databaseExists <- FS.exists Config.databaseFilePath
-  if databaseExists then pure unit else do
-    schemaExists <- FS.exists Config.schemaFilePath
-    if not schemaExists then
-      Database.empty Config.databaseFilePath
-      else
-      Database.create Config.databaseFilePath Config.schemaFilePath
+  if databaseExists then pure unit else Database.create Config.databaseFilePath
