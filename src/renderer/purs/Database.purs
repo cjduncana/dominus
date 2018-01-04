@@ -3,20 +3,15 @@ module Database (create, execute) where
 import Control.Monad.Aff (Aff)
 import Control.Monad.Eff.Class (liftEff)
 import Data.Foldable as Foldable
-import FFI.Sql (Database, QueryResult, SQLJS, SQLEff)
+import FFI.Sql (Database, QueryResult, SQLJS)
 import FFI.Sql as Sql
-import Migrations as Migrations
+import InitialDatabase as InitialDatabase
 import Node.Buffer (BUFFER)
 import Node.Buffer as Buffer
 import Node.FS (FS)
 import Node.FS.Aff as FS
 import Node.Path (FilePath)
 import Prelude (Unit, bind, discard, pure, ($))
-
-
-applyMigrations :: forall eff. Database -> SQLEff eff Unit
-applyMigrations database =
-  Foldable.traverse_ (Sql.exec database) Migrations.sql
 
 
 close :: forall eff. Database -> FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
@@ -30,7 +25,7 @@ close database databaseFilePath = do
 create :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
 create databaseFilePath = do
   database <- liftEff $ Sql.create
-  liftEff $ applyMigrations database
+  liftEff $ Foldable.traverse_ (Sql.exec database) InitialDatabase.sql
   close database databaseFilePath
 
 
