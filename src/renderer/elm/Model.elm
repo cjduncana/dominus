@@ -10,6 +10,7 @@ module Model
 import Date exposing (Date)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Decode.Extra as Decode
+import Models.Good exposing (Goods)
 import Models.Report exposing (Reports)
 import Ports
 import Task
@@ -17,6 +18,7 @@ import Task
 
 type alias Model =
     { reports : Reports
+    , goods : Goods
     , today : Maybe Date
     }
 
@@ -24,6 +26,7 @@ type alias Model =
 initialModel : Model
 initialModel =
     { reports = Models.Report.newReports
+    , goods = []
     , today = Nothing
     }
 
@@ -66,6 +69,12 @@ reportsDecoder =
         |> Decode.map (Maybe.withDefault Models.Report.newReports)
 
 
+goodsDecoder : Decoder Goods
+goodsDecoder =
+    Decode.list Models.Good.goodDecoder
+        |> Decode.field "goods"
+
+
 todayDecoder : Decoder Date
 todayDecoder =
     Decode.field "now" Decode.float
@@ -76,4 +85,5 @@ modelDecoder : Decoder Model
 modelDecoder =
     Decode.succeed Model
         |> Decode.andMap reportsDecoder
+        |> Decode.andMap goodsDecoder
         |> Decode.andMap (Decode.maybe todayDecoder)

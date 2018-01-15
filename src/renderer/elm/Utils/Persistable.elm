@@ -1,4 +1,6 @@
-module Utils.Persistable exposing (Persistable(New, Persisted), value)
+module Utils.Persistable exposing (Persistable(New, Persisted), decoder, value)
+
+import Json.Decode as Decode exposing (Decoder)
 
 
 type Persistable id value
@@ -14,3 +16,9 @@ value persistable =
 
         Persisted _ v ->
             v
+
+
+decoder : Decoder id -> value -> Decoder (Persistable id value)
+decoder idDecoder =
+    flip Persisted
+        >> flip Decode.map idDecoder

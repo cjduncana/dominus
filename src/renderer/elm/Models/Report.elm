@@ -55,11 +55,7 @@ reportDecoder =
                             ActiveReport
                         )
             )
-        |> Decode.andThen
-            (\report ->
-                Decode.field "id" Uuid.decoder
-                    |> Decode.map (flip Persistable.Persisted report)
-            )
+        |> Decode.andThen (Persistable.decoder (Decode.field "id" Uuid.decoder))
 
 
 mapReport : (Bool -> Maybe Date -> a) -> Maybe Date -> Report -> a
