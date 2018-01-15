@@ -1,10 +1,11 @@
-module Types (Action, App, Flags, Report, flags, report) where
+module Types (Action, App, Flag, Good, Report, flag, report) where
 
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
 import Data.Argonaut.Encode (class EncodeJson, (:=), (~>))
 import Data.DateTime.Instant (Instant, unInstant)
 import Data.Either (Either(..))
+import Data.Maybe (Maybe)
 import Data.Newtype (unwrap)
 import Prelude (class Show, bind, ($))
 
@@ -30,19 +31,47 @@ instance showAction :: Show Action where
   show MinimizeWindow = "MinimizeWindow"
 
 
-data Flags = Flags
+data Brand = Brand
+  { id :: String
+  , name :: String
+  }
+
+instance encodeBrand :: EncodeJson Brand where
+  encodeJson (Brand { id, name }) =
+    "id" := id
+      ~> "name" := name
+      ~> jsonEmptyObject
+
+
+data Flag = Flag
   { reports :: Array Report
+  , goods :: Array Good
   , now :: Instant
   }
 
-flags :: Array Report -> Instant -> Flags
-flags reports now =
-  Flags { reports: reports, now: now }
+flag :: Array Report -> Array Good -> Instant -> Flag
+flag reports goods now =
+  Flag { reports: reports, goods: goods, now: now }
 
-instance encodeFlags :: EncodeJson Flags where
-  encodeJson (Flags { reports, now }) =
+instance encodeFlag :: EncodeJson Flag where
+  encodeJson (Flag { reports, goods, now }) =
     "reports" := reports
+      ~> "goods" := goods
       ~> "now" := (unwrap $ unInstant now)
+      ~> jsonEmptyObject
+
+
+data Good = Good
+  { id :: String
+  , name :: String
+  , brand :: Maybe Brand
+  }
+
+instance encodeGood :: EncodeJson Good where
+  encodeJson (Good { id, name, brand }) =
+    "id" := id
+      ~> "name" := name
+      ~> "brand" := brand
       ~> jsonEmptyObject
 
 

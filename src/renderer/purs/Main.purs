@@ -13,32 +13,39 @@ import Database as Database
 import FFI.Elm as Elm
 import FFI.Ports as Ports
 import FFI.Sql (SQLJS)
+import Goods as Goods
 import Node.Buffer (BUFFER)
 import Node.FS (FS)
 import Node.FS.Aff as FS
 import Node.Path (FilePath)
-import Prelude (Unit, bind, pure, unit, (#), (>>=))
+import Prelude (Unit, bind, pure, unit, (#), (<$>), (<*>), (>>=))
 import Reports as Reports
-import Types (Report, flags)
+import Types (Flag, flag)
 
 
 main :: forall eff. FilePath -> Eff (buffer :: BUFFER, console :: CONSOLE, fs :: FS, now :: NOW, sql :: SQLJS | eff) Unit
 main userDataPath =
   dbInit userDataPath
-    >>= (\_ -> Reports.list userDataPath)
+    >>= (\_ -> getFlag userDataPath)
     # Aff.runAff_ (Either.either Console.errorShow appInit)
 
 
-appInit :: forall eff. Array Report -> Eff (now :: NOW | eff) Unit
-appInit reports = do
-  now <- Now.now
-  app <- Elm.start (flags reports now)
-  Ports.start app
+appInit :: forall eff. Flag -> Eff (now :: NOW | eff) Unit
+appInit flag =
+  Elm.start flag >>= Ports.start
 
 
 dbInit :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
 dbInit userDataPath = do
   databaseExists <- FS.exists databaseFilePath
-  if databaseExists then pure unit else do Database.create databaseFilePath
+  if databaseExists then pure unit else Database.create databaseFilePath
   where
   databaseFilePath = Config.databaseFilePath userDataPath
+
+
+getFlag :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, now :: NOW, sql :: SQLJS | eff) Flag
+getFlag userDataPath =
+  flag
+    <$> Reports.list userDataPath
+    <*> Goods.list userDataPath
+    <*> Aff.liftEff' Now.now
