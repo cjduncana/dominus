@@ -30,6 +30,9 @@
   "homepage": "https://github.com/cjduncana/dominus#readme",
   "electronWebpack": {
     "title": "Dominus",
+    "main": {
+      "webpackConfig": "webpack.renderer.js"
+    },
     "renderer": {
       "webpackConfig": "webpack.renderer.js"
     }

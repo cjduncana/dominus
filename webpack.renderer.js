@@ -2,6 +2,8 @@
 
 const combineLoaders = require('webpack-combine-loaders');
 
+const common = require('./webpack.common');
+
 module.exports = {
   module: {
     rules: [{
@@ -17,14 +19,7 @@ module.exports = {
           warn: true
         }
       }])
-    }, {
-      test: /\.purs$/,
-      loader: 'purs-loader',
-      exclude: [/node_modules/],
-      query: {
-        src: ['bower_components/purescript-*/src/**/*.purs', 'src/**/*.purs']
-      }
-    }]
+    }, common.pursRule]
   },
   resolve: {
     extensions: ['.js', '.elm', '.purs']

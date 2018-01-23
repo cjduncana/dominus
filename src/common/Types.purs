@@ -1,4 +1,4 @@
-module Types (Action, App, Flag, Good, Report, flag, report) where
+module Types (Action(..), App, Flag, Good, Report, flag, report) where
 
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
@@ -7,7 +7,7 @@ import Data.DateTime.Instant (Instant, unInstant)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe)
 import Data.Newtype (unwrap)
-import Prelude (class Show, bind, ($))
+import Prelude (bind, ($))
 
 
 foreign import data App :: Type
@@ -26,9 +26,11 @@ instance decodeAction :: DecodeJson Action where
       "MinimizeWindow" -> Right MinimizeWindow
       _ -> Left "Action couldn't be decoded"
 
-instance showAction :: Show Action where
-  show CloseWindow = "CloseWindow"
-  show MinimizeWindow = "MinimizeWindow"
+instance encodeAction :: EncodeJson Action where
+  encodeJson =
+    case _ of
+      CloseWindow -> "type" := "CloseWindow" ~> jsonEmptyObject
+      MinimizeWindow -> "type" := "MinimizeWindow" ~> jsonEmptyObject
 
 
 data Brand = Brand
