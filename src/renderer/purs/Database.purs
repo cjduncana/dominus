@@ -18,7 +18,7 @@ import Node.Buffer as Buffer
 import Node.FS (FS)
 import Node.FS.Aff as FS
 import Node.Path (FilePath)
-import Prelude (Unit, bind, discard, pure, show, (#), ($), (>>>))
+import Prelude (Unit, bind, discard, flip, pure, show, (#), ($), (>>>))
 
 
 close :: forall eff. Database -> FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
@@ -37,11 +37,10 @@ create databaseFilePath = do
 
 
 execute :: forall eff. FilePath -> String -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) (Array QueryResult)
-execute databaseFilePath sql = do
-  database <- open databaseFilePath
-  results <- liftEff $ Sql.exec database sql
-  close database databaseFilePath
-  pure results
+execute databaseFilePath sql =
+  Aff.bracket (open databaseFilePath)
+    (flip close databaseFilePath)
+    (flip Sql.exec sql >>> liftEff)
 
 
 fromFToAff :: forall a eff. F a -> Aff eff a
