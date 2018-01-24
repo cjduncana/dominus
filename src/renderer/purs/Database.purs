@@ -10,6 +10,7 @@ import Data.Foldable as Foldable
 import Data.Foreign (F, Foreign)
 import Data.Functor as Functor
 import Data.Traversable as Traversable
+import Electron (ELECTRON)
 import FFI.Sql (Database, QueryResult, SQLJS)
 import FFI.Sql as Sql
 import InitialDatabase as InitialDatabase
@@ -48,9 +49,10 @@ fromFToAff =
   Except.runExcept >>> Either.either (show >>> Aff.error >>> Aff.throwError) pure
 
 
-fromManyResults :: forall eff a. (Array String -> Array Foreign -> F a) -> String -> FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) (Array a)
-fromManyResults transformer query userDataPath = do
-  results <- execute (Config.databaseFilePath userDataPath) query
+fromManyResults :: forall eff a. (Array String -> Array Foreign -> F a) -> String -> Aff (buffer :: BUFFER, electron :: ELECTRON, fs :: FS, sql :: SQLJS | eff) (Array a)
+fromManyResults transformer query = do
+  path <- Aff.liftEff' Config.databaseFilePath
+  results <- execute path query
   Sql.getFirstResult results # manyResults transformer # fromFToAff
 
 

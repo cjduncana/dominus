@@ -18,16 +18,15 @@ import Goods as Goods
 import Node.Buffer (BUFFER)
 import Node.FS (FS)
 import Node.FS.Aff as FS
-import Node.Path (FilePath)
 import Prelude (Unit, bind, unless, (#), ($), (<$>), (<*>), (>>=))
 import Reports as Reports
 import Types (Flag, flag)
 
 
-main :: forall eff. FilePath -> Eff (buffer :: BUFFER, console :: CONSOLE, electron :: ELECTRON, fs :: FS, now :: NOW, sql :: SQLJS | eff) Unit
-main userDataPath =
-  dbInit userDataPath
-    >>= (\_ -> getFlag userDataPath)
+main :: forall eff. Eff (buffer :: BUFFER, console :: CONSOLE, electron :: ELECTRON, fs :: FS, now :: NOW, sql :: SQLJS | eff) Unit
+main =
+  dbInit
+    >>= (\_ -> getFlag)
     # Aff.runAff_ (Either.either Console.errorShow appInit)
 
 
@@ -36,17 +35,16 @@ appInit flag =
   Elm.start flag >>= Ports.start
 
 
-dbInit :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, sql :: SQLJS | eff) Unit
-dbInit userDataPath = do
+dbInit :: forall eff. Aff (buffer :: BUFFER, electron :: ELECTRON, fs :: FS, sql :: SQLJS | eff) Unit
+dbInit = do
+  databaseFilePath <- Aff.liftEff' Config.databaseFilePath
   databaseExists <- FS.exists databaseFilePath
   unless databaseExists $ Database.create databaseFilePath
-  where
-  databaseFilePath = Config.databaseFilePath userDataPath
 
 
-getFlag :: forall eff. FilePath -> Aff (buffer :: BUFFER, fs :: FS, now :: NOW, sql :: SQLJS | eff) Flag
-getFlag userDataPath =
+getFlag :: forall eff. Aff (buffer :: BUFFER, electron :: ELECTRON, fs :: FS, now :: NOW, sql :: SQLJS | eff) Flag
+getFlag =
   Aff.sequential $ flag
-    <$> Aff.parallel (Reports.list userDataPath)
-    <*> Aff.parallel (Goods.list userDataPath)
+    <$> Aff.parallel Reports.list
+    <*> Aff.parallel Goods.list
     <*> Aff.parallel (Aff.liftEff' Now.now)
