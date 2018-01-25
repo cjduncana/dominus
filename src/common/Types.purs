@@ -53,7 +53,7 @@ data Flag = Flag
 
 flag :: Array Report -> Array Good -> Instant -> Flag
 flag reports goods now =
-  Flag { reports: reports, goods: goods, now: now }
+  Flag { reports, goods, now }
 
 instance encodeFlag :: EncodeJson Flag where
   encodeJson (Flag { reports, goods, now }) =
@@ -85,11 +85,7 @@ data Report = Report
 
 report :: String -> String -> Boolean -> Report
 report id date completed =
-  Report
-      { id: id
-      , date: date
-      , completed: completed
-      }
+  Report { id, date, completed }
 
 instance encodeReport :: EncodeJson Report where
   encodeJson (Report { id, date, completed }) =
