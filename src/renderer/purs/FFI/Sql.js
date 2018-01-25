@@ -4,7 +4,7 @@ const SQL = require('sql.js');
 
 exports.close = function(db) {
   return function() {
-    return db.close();
+    db.close();
   };
 };
 
