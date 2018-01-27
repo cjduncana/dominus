@@ -1,4 +1,4 @@
-module Types (Action(..), App, Flag, Good, Report, flag, report) where
+module Types (Action(..), App, Brand, Flag, Good, Report, flag, good, report) where
 
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
@@ -68,6 +68,10 @@ data Good = Good
   , name :: String
   , brand :: Maybe Brand
   }
+
+good :: String -> String -> Maybe Brand -> Good
+good id name brand =
+  Good { id, name, brand }
 
 instance encodeGood :: EncodeJson Good where
   encodeJson (Good { id, name, brand }) =
