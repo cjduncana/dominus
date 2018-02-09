@@ -7,11 +7,13 @@ import Ports
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Model.DateReceived date ->
-            ( { model | today = Just date }, Cmd.none )
+        Model.DateReceived today ->
+            Model.updateToday today model
+                |> Model.doNothing
 
         Model.PortMsg portMsg ->
-            ( model, Ports.cmd portMsg )
+            Ports.cmd portMsg
+                |> flip Model.doSomething model
 
         Model.NoOp ->
-            ( model, Cmd.none )
+            Model.doNothing model

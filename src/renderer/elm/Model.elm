@@ -3,8 +3,11 @@ module Model
         ( Model
         , Msg(DateReceived, NoOp, PortMsg)
         , closeWindow
+        , doNothing
+        , doSomething
         , init
         , minimizeWindow
+        , updateToday
         )
 
 import Date exposing (Date)
@@ -44,6 +47,21 @@ initCmd model =
         |> Maybe.map (\_ -> Cmd.none)
         |> Maybe.withDefault (Task.perform DateReceived Date.now)
         |> (,) model
+
+
+updateToday : Date -> Model -> Model
+updateToday today model =
+    { model | today = Just today }
+
+
+doSomething : Cmd msg -> Model -> ( Model, Cmd msg )
+doSomething =
+    flip (,)
+
+
+doNothing : Model -> ( Model, Cmd msg )
+doNothing =
+    doSomething Cmd.none
 
 
 type Msg
